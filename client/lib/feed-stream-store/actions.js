@@ -17,7 +17,8 @@ function getNextPageParams( store ) {
 	const params = {
 			orderBy: store.orderBy,
 			number: store.perPage,
-			meta: 'post,discover_original_post'
+			meta: 'post,discover_original_post',
+			content_width: Math.min( 720, document.documentElement.clientWidth - 40 )
 		},
 		lastDate = store.getLastItemWithDate();
 

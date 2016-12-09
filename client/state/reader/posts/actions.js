@@ -52,10 +52,11 @@ function fetchForKey( postKey ) {
 	if ( postKey.blogId ) {
 		return wpcom.undocumented().readSitePost( {
 			site: postKey.blogId,
-			postId: postKey.postId
+			postId: postKey.postId,
+			content_width: Math.min( 720, document.documentElement.clientWidth - 40 )
 		} );
 	}
-	return wpcom.undocumented().readFeedPost( postKey );
+	return wpcom.undocumented().readFeedPost( { ...postKey, content_width: Math.min( 720, document.documentElement.clientWidth - 40 ) } );
 }
 
 export function fetchPost( postKey ) {

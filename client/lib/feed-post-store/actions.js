@@ -10,9 +10,11 @@ const Dispatcher = require( 'dispatcher' ),
 
 let feedPostFetcher, blogPostFetcher, FeedPostActions;
 
+const CONTENT_WIDTH = Math.min( 720, document.documentElement.clientWidth - 40 );
+
 feedPostFetcher = new PostFetcher( {
 	makeRequest: function( postKey ) {
-		return wpcom.undocumented().readFeedPost( postKey );
+		return wpcom.undocumented().readFeedPost( { ...postKey, content_width: CONTENT_WIDTH } );
 	},
 	onFetch: function( postKey ) {
 		Dispatcher.handleViewAction( {
@@ -37,7 +39,7 @@ feedPostFetcher = new PostFetcher( {
 
 blogPostFetcher = new PostFetcher( {
 	makeRequest: function( postKey ) {
-		return wpcom.undocumented().readSitePost( { site: postKey.blogId, postId: postKey.postId } );
+		return wpcom.undocumented().readSitePost( { site: postKey.blogId, postId: postKey.postId, content_width: CONTENT_WIDTH } );
 	},
 	onFetch: function( postKey ) {
 		Dispatcher.handleViewAction( {

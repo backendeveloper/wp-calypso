@@ -33,7 +33,8 @@ export function requestRelatedPosts( siteId, postId, scope = SCOPE_ALL ) {
 		const query = {
 			site_id: siteId,
 			post_id: postId,
-			meta: 'site'
+			meta: 'site',
+			content_width: Math.min( 720, document.documentElement.clientWidth - 40 )
 		};
 
 		if ( scope === SCOPE_SAME ) {
