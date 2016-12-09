@@ -3,10 +3,11 @@
  */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 /**
  * Internal dependencies
  */
+import notices from 'notices';
+import { localize } from 'i18n-calypso';
 import CompactFormToggle from 'components/forms/form-toggle/compact';
 import FormSettingExplanation from 'components/forms/form-setting-explanation';
 
@@ -42,9 +43,21 @@ class JetpackModuleToggle extends Component {
 
 	handleChange = () => {
 		if ( ! this.props.checked ) {
-			this.props.activateModule( this.props.siteId, this.props.moduleSlug );
+			this.props.activateModule( this.props.siteId, this.props.moduleSlug )
+				.then( () => {
+					notices.success( this.props.translate( '%s was activated!', { args: this.props.moduleDetails.name } ) );
+				} )
+				.catch( () => {
+					notices.error( this.props.translate( '%s couldn\'t be activated!', { args: this.props.moduleDetails.name } ) );
+				} );
 		} else {
-			this.props.deactivateModule( this.props.siteId, this.props.moduleSlug );
+			this.props.deactivateModule( this.props.siteId, this.props.moduleSlug )
+				.then( () => {
+					notices.success( this.props.translate( '%s was deactivated!', { args: this.props.moduleDetails.name } ) );
+				} )
+				.catch( () => {
+					notices.error( this.props.translate( '%s couldn\'t be deactivated!', { args: this.props.moduleDetails.name } ) );
+				} );
 		}
 	}
 
@@ -75,13 +88,15 @@ class JetpackModuleToggle extends Component {
 }
 
 export default connect( ( state, ownProps ) => {
-	const isActive = isModuleActive( state, ownProps.siteId, ownProps.moduleSlug );
-	const isActivating = isActivatingModule( state, ownProps.siteId, ownProps.moduleSlug );
-	const isDeactivating = isDeactivatingModule( state, ownProps.siteId, ownProps.moduleSlug );
-	const moduleDetailsNotLoaded = getModule( state, ownProps.siteId, ownProps.moduleSlug ) === null;
-	const toggling = isActivating || isDeactivating;
+	const active = isModuleActive( state, ownProps.siteId, ownProps.moduleSlug );
+	const activating = isActivatingModule( state, ownProps.siteId, ownProps.moduleSlug );
+	const moduleDetails = getModule( state, ownProps.siteId, ownProps.moduleSlug );
+	const deactivating = isDeactivatingModule( state, ownProps.siteId, ownProps.moduleSlug );
+	const moduleDetailsNotLoaded = moduleDetails === null;
+	const toggling = activating || deactivating;
 	return {
-		checked: ( isActive && ! isDeactivating ) || ( ! isActive && isActivating ),
+		moduleDetails,
+		checked: ( active && ! deactivating ) || ( ! active && activating ),
 		toggling,
 		disabled: moduleDetailsNotLoaded || toggling,
 		isJetpackSite: isJetpackSite( state, ownProps.siteId )
@@ -89,4 +104,4 @@ export default connect( ( state, ownProps ) => {
 }, {
 	activateModule,
 	deactivateModule
-} )( JetpackModuleToggle );
+} )( localize( JetpackModuleToggle ) );
