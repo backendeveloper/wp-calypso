@@ -1,7 +1,11 @@
 /**
  * Internal dependencies
  */
-import { AUTOMATED_TRANSFER_STATUS_SET } from 'state/action-types';
+import {
+	AUTOMATED_TRANSFER_ELIGIBILITY_REQUEST,
+	AUTOMATED_TRANSFER_ELIGIBILITY_UPDATE,
+	AUTOMATED_TRANSFER_STATUS_SET,
+} from 'state/action-types';
 
 /**
  * Sets the status of an automated transfer for a particular site
@@ -15,3 +19,15 @@ export const setAutomatedTransferStatus = ( siteId, automatedTransferStatus ) =>
 	siteId,
 	automatedTransferStatus,
 } );
+
+export const requestEligibility = domain => ( {
+	type: AUTOMATED_TRANSFER_ELIGIBILITY_REQUEST,
+	domain,
+} );
+
+export const updateEligibility = ( domain, data ) => ( {
+	type: AUTOMATED_TRANSFER_ELIGIBILITY_UPDATE,
+	domain,
+	data,
+} );
+
