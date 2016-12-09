@@ -90,6 +90,8 @@ const findTriggeredTour = state => {
 
 ### Views
 
+#### Structure
+
 At its outermost level, Guided Tours is a single component, **`GuidedTours`**, rendered in Calypso's `Layout`. `GuidedTours` is essentially a wrapper which:
 
 - takes care of the subsystem's data needs (via `connect` and `QueryPreferences`);
@@ -107,9 +109,16 @@ To combined these sources, an initial approach was based on `React.cloneElement`
 
 Finally, the **plain JSX tour descriptions** are built using a set of [config elements] to create the flow of steps of a tour: `Tour`, `Step`, `Next`, `Continue`, `Quit`. These components are context-aware and have specialized logic that, ultimately, set up the control flow of a tour.
 
+#### Positioning
+
+Positioning of tour steps is configurable via `Step`'s `placement` attribute, working in tandem with `target` and `arrow`. Guided Tours' [`positioning`][positioning] library is used, and ultimately a `(x, y)` pair of coords is obtained, converted into a `left/right, top` set of CSS properties to be attached to the tour step's element.
+
+Due to other constraints [which?], steps are rendered as children of `RootChild`, meaning they are not attached to the UI elements they are pointing to (i.e., the steps' targets) but are instead close to the root of the document. This has a number of implications, notably that positioning has to be precisely calcuated to mimick the effect of having steps that are close to their targets; occasionally, z-index differences may need correction; things like scrolling require the positioning logic to know which scrolling container our target is closer to; more importantly, positioning is a somewhat static process that needs to be consciously refreshed whenever applicable – e.g. when scrolling and resizing the window, which are the scenarios GT automatically guards against, but hypothetically anytime the layout changes things can become off. This is typically not an issue when navigating, but it can become problematic in scenarios such as rendering a step on a view where an image that is loading will grow and thus alter the layout.
+
 [config]: https://github.com/Automattic/wp-calypso/blob/master/client/layout/guided-tours/config.js
 [getChildContext]: https://github.com/Automattic/wp-calypso/blob/bc97ba292a5f6213f0cf0c35219472135c4f9b9f/client/layout/guided-tours/config-elements.js#L480
 [config elements]: https://github.com/Automattic/wp-calypso/blob/bc97ba292a5f6213f0cf0c35219472135c4f9b9f/client/layout/guided-tours/config-elements.js
 [actionLog]: https://github.com/Automattic/wp-calypso/tree/master/client/state/ui/action-log
 [relevant types]: https://github.com/Automattic/wp-calypso/blob/b6d0d27438a16cf7c8700cf4ed8b70dbc42805e3/client/state/ui/action-log/reducer.js#L18
 [findEligibleTour]: https://github.com/Automattic/wp-calypso/blob/b6d0d27438a16cf7c8700cf4ed8b70dbc42805e3/client/state/ui/guided-tours/selectors/index.js#L175
+[positioning]: https://github.com/Automattic/wp-calypso/blob/master/client/layout/guided-tours/positioning.js
