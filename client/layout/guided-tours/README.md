@@ -20,10 +20,10 @@ _(TODO: document all the elements in `config-elements.js`)_
 
 _(TODO: add tour descriptions)_
 
-- [Main Tour](main-tour.js)
-- [Site Title Tour](site-title-tour.js)
-- [Theme Sheet Welcome Tour](theme-sheet-welcome-tour.js)
-- [Design Showcase Welcome Tour](design-showcase-welcome-tour.js)
+- [Main Tour](tours/main-tour.js)
+- [Site Title Tour](tours/site-title-tour.js)
+- [Theme Sheet Welcome Tour](tours/theme-sheet-welcome-tour.js)
+- [Design Showcase Welcome Tour](tours/design-showcase-welcome-tour.js)
 
 ## Further Reading
 
