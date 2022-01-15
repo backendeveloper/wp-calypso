@@ -76,7 +76,7 @@
     "localforage": "1.4.0",
     "lodash": "4.15.0",
     "lunr": "0.5.7",
-    "marked": "0.3.5",
+    "marked": "4.0.10",
     "moment": "2.10.6",
     "morgan": "1.2.0",
     "ms": "0.7.1",
